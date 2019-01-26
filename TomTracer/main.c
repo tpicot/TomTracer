@@ -6,7 +6,7 @@
 
 /* https://dzone.com/articles/sdl2-pixel-drawing */
 
-int main(int argc, char ** argv)
+/*int main(int argc, char ** argv)
 {
 	int leftMouseButtonDown = 0;
 	int quit = 0;
@@ -61,6 +61,48 @@ int main(int argc, char ** argv)
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
+	return 0;
+}*/
+
+typedef struct projectile {
+	tuple position;
+	tuple velocity;
+} projectile;
+
+typedef struct environment {
+	tuple gravity;
+	tuple wind;
+} environment;
+
+projectile tick(environment e, projectile p) {
+	tuple position;
+	tuple velocity;
+	projectile new_p;
+
+	position = tuple_add(p.position, p.velocity);
+	velocity = tuple_add(tuple_add(p.velocity, e.gravity), e.wind);
+
+	new_p.position = position;
+	new_p.velocity = velocity;
+
+	return new_p;
+}
+
+int main(int argc, char ** argv) {
+	projectile p;
+	environment e;
+
+	p.position = tuple_create_point(0, 1, 0);
+	p.velocity = tuple_create_vector(1, 1, 0);
+	e.gravity = tuple_create_vector(0, (float)-0.1, 0);
+	e.wind = tuple_create_vector((float)-0.01, 0, 0);
+
+	
+	while (p.position.y > 0) {
+		p = tick(e, p);
+		printf("x: %f, y: %f, z: %f, w: %f \n", p.position.x, p.position.y, p.position.z, p.position.w);
+	}
 
 	return 0;
 }
