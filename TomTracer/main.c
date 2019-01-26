@@ -2,9 +2,10 @@
 #include <string.h>
 #include <SDL.h>
 
+#include "tuple.h"
+
 /* https://dzone.com/articles/sdl2-pixel-drawing */
 
-/* test */
 int main(int argc, char ** argv)
 {
 	int leftMouseButtonDown = 0;
@@ -19,6 +20,8 @@ int main(int argc, char ** argv)
 	Uint32 * pixels = malloc(640 * 480 * sizeof(Uint32));
 
 	memset(pixels, 255, 640 * 480 * sizeof(Uint32));
+
+	tuple_create_point(1, 2, 3);
 
 	while (!quit)
 	{
