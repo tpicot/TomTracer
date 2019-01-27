@@ -6,6 +6,7 @@ extern "C" {
 
 #include "../TomTracer/tuple.h"
 #include "../TomTracer/colours.h"
+#include "../TomTracer/canvas.h"
 #include "../TomTracer/util.h"
 }
 
@@ -183,6 +184,42 @@ TEST(Colour, colour_scale) {
 	EXPECT_FLOAT_EQ(a.g, (float)0.6);
 	EXPECT_FLOAT_EQ(a.b, (float)0.8);
 }
+
+TEST(Canvas, canvas_create) {
+	canvas *c = canvas_create(10, 20);
+	colour a = colour_create(0, 0, 0);
+
+	EXPECT_EQ(c->height, 20);
+	EXPECT_EQ(c->width, 10);
+
+	for (int i = 0; i < c->width; i++)
+		for (int j = 0; j < c->height; j++) {
+			EXPECT_EQ(c->pixels[i][j].r, a.r);
+			EXPECT_EQ(c->pixels[i][j].g, a.g);
+			EXPECT_EQ(c->pixels[i][j].b, a.b);
+		}
+
+	canvas_destroy(c);
+	free(c);
+}
+
+TEST(Canvas, canvas_write_pixel) {
+	canvas *c = canvas_create(10, 20);
+	colour a = colour_create(1, 0, 0);
+
+	canvas_set_pixel(c, 2, 3, a);
+
+	colour b = canvas_get_pixel(c, 2, 3);
+
+	EXPECT_EQ(a.r, b.r);
+	EXPECT_EQ(a.g, b.g);
+	EXPECT_EQ(a.b, b.b);
+
+	canvas_destroy(c);
+	free(c);
+}
+
+
 
 /* util.h */
 

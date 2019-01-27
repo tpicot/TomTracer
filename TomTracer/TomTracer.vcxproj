@@ -133,12 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="canvas.c" />
     <ClCompile Include="colours.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="tuple.c" />
     <ClCompile Include="util.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="canvas.h" />
     <ClInclude Include="colours.h" />
     <ClInclude Include="tuple.h" />
     <ClInclude Include="util.h" />
