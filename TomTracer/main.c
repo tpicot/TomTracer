@@ -94,7 +94,7 @@ int main(int argc, char ** argv) {
 	environment e;
 
 	p.position = tuple_create_point(0, 1, 0);
-	p.velocity = tuple_create_vector(1, 1, 0);
+	p.velocity = tuple_create_vector(5, 1, 0);
 	e.gravity = tuple_create_vector(0, (float)-0.1, 0);
 	e.wind = tuple_create_vector((float)-0.01, 0, 0);
 

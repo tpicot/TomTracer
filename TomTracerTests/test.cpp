@@ -5,8 +5,8 @@
 extern "C" {
 
 #include "../TomTracer/tuple.h"
+#include "../TomTracer/colours.h"
 #include "../TomTracer/util.h"
-
 }
 
 /* tuple.h */
@@ -144,6 +144,44 @@ TEST(Tuple, vector_cross_product) {
 	d = { 1, -2, 1 };
 
 	EXPECT_EQ(tuple_compare(&c, &d), 1);
+}
+
+/* colours.h */
+
+TEST(Colour, colour_create) {
+	colour c = colour_create((float)-.5, (float)0.4, (float)1.7);
+	EXPECT_FLOAT_EQ(c.r, (float)-0.5);
+	EXPECT_FLOAT_EQ(c.g, (float)0.4);
+	EXPECT_FLOAT_EQ(c.b, (float)1.7);
+}
+
+TEST(Colour, colour_add) {
+	colour a = colour_create((float)0.9, (float)0.6, (float)0.75);
+	colour b = colour_create((float)0.7, (float)0.1, (float)0.25);
+	colour c = colour_add(a, b);
+
+	EXPECT_FLOAT_EQ(c.r, (float)1.6);
+	EXPECT_FLOAT_EQ(c.g, (float)0.7);
+	EXPECT_FLOAT_EQ(c.b, (float)1.0);
+}
+
+TEST(Colour, colour_subtract) {
+	colour a = colour_create((float)0.9, (float)0.6, (float)0.75);
+	colour b = colour_create((float)0.7, (float)0.1, (float)0.25);
+	colour c = colour_subtract(a, b);
+
+	EXPECT_FLOAT_EQ(c.r, (float)0.2);
+	EXPECT_FLOAT_EQ(c.g, (float)0.5);
+	EXPECT_FLOAT_EQ(c.b, (float)0.5);
+}
+
+TEST(Colour, colour_scale) {
+	colour a = colour_create((float)0.2, (float)0.3, (float)0.4);
+	a = colour_scale(a, 2);
+
+	EXPECT_FLOAT_EQ(a.r, (float)0.4);
+	EXPECT_FLOAT_EQ(a.g, (float)0.6);
+	EXPECT_FLOAT_EQ(a.b, (float)0.8);
 }
 
 /* util.h */
