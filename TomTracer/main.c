@@ -5,9 +5,7 @@
 
 #include "tuple.h"
 #include "canvas.h"
-
-#define WIDTH 900
-#define HEIGHT 550
+#include "colours.h"
 
 /* projectile toy */
 
@@ -35,66 +33,78 @@ projectile tick(environment e, projectile p) {
 	return new_p;
 }
 
-/* pixel manipulation */
-
-int pixel_position(int x, int y) {
-	return (int)(y * WIDTH + x);
-}
-
-int plot(Uint32* pixels, int x, int y, int r, int g, int b) {
-	int position = pixel_position(x, y);
-
-	if (position < (WIDTH * HEIGHT))
-		pixels[position] = (255 << 16) | (0 << 8) | 0;
-}
-
-void plot_canvas(canvas c, Uint32* pixels) {
-
-
-}
-
-int main(int argc, char ** argv)
-{
-	int leftMouseButtonDown = 0;
-	int quit = 0;
-	SDL_Event event;
-	Uint32 *pixels;
-	canvas *c;
-
-	/* SDL init */
-	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window *window = SDL_CreateWindow("TomTracer",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, 0);
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-	SDL_Texture *texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
-
-	/* Tracer init */
-	// c = canvas_create(WIDTH, HEIGHT);
-
-	pixels = malloc(WIDTH * HEIGHT * sizeof(Uint32));
-	memset(pixels, 255, WIDTH * HEIGHT * sizeof(Uint32));
-	
+void plot_projectile(canvas *c) {
 	projectile p;
 	environment e;
-	int pixel_location;
 	int x, y;
+	colour col = { 255,0,0 };
 
 	p.position = tuple_create_point(0, 1, 0);
-	p.velocity = tuple_scale(tuple_normalize(tuple_create_vector(1, 1.8, 0)), (float)11.25);
-	e.gravity = tuple_create_vector(0, (float)-0.2, 0);
+	p.velocity = tuple_scale(tuple_normalize(tuple_create_vector((float)1, (float)1.8, (float)0)), (float)11.25);
+	e.gravity = tuple_create_vector(0, (float)-0.1, 0);
 	e.wind = tuple_create_vector((float)-0.01, 0, 0);
 
 	while (p.position.y > 0) {
 		p = tick(e, p);
 
-		int y = (int)(HEIGHT - p.position.y);
-		int x = (int)p.position.x;
+		y = (int)(c->height - p.position.y); /* move (0,0) from bottom left to top left */
+		x = (int)p.position.x;
 
-		printf("x: %f, y: %f, z: %f, w: %f \n", p.position.x, p.position.y, p.position.z, p.position.w);
-		plot(pixels, x, y, 0, 0, 0);
+		printf("x: %f, y: %f, z: %f, w: %f \n", p.position.x, p.position.y, p.position.z, p.position.w);	
+		canvas_set_pixel(c, x, y, col);
 	}
+}
 
+/* pixel manipulation */
+
+int get_pixel_position(int x, int y, int width) {
+	return (int)(y * width + x);
+}
+
+void plot_pixel(Uint32* pixels, int x, int y, int r, int g, int b, int width, int height) {
+	int position = get_pixel_position(x, y, width);
+
+	if (position < (width * height)) /* bounds check */
+		pixels[position] = (r << 16) | (g << 8) | b;
+}
+
+void canvas_to_pixels(canvas *c, Uint32* pixels) {
+	// copy each pixel in canvas to SDL pixel area
+	int i, j;
+	colour col;
+	
+	for(i = 0; i < c->width; i++)
+		for (j = 0; j < c->height; j++) {
+			col = canvas_get_pixel(c, i, j);
+				plot_pixel(pixels, i, j, col.r, col.g, col.b, c->width, c->height);
+		}
+}
+
+int main(int argc, char ** argv)
+{
+	int quit = 0;
+	SDL_Event event;
+	Uint32 *pixels;
+
+	/* Tracer init */
+	int width = 900;
+	int height = 550;
+	canvas *c;
+
+	/* SDL init */
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Window *window = SDL_CreateWindow("TomTracer",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0);
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+	SDL_Texture *texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+
+	pixels = malloc(width * height * sizeof(Uint32));
+	
+	c = canvas_create(width, height);
+	plot_projectile(c);
+	canvas_to_pixels(c, pixels);
+	   	
 	// display
-	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(Uint32));
+	SDL_UpdateTexture(texture, NULL, pixels, width * sizeof(Uint32));
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
@@ -115,6 +125,8 @@ int main(int argc, char ** argv)
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
+	free(c);
 
 	return 0;
 }
