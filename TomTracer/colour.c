@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "colours.h"
+#include "colour.h"
 #include "util.h"
 
 void colour_set_value(colour *c, float r, float g, float b) {

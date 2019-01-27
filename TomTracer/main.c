@@ -5,7 +5,7 @@
 
 #include "tuple.h"
 #include "canvas.h"
-#include "colours.h"
+#include "colour.h"
 
 /* projectile toy */
 

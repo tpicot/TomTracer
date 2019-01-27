@@ -1,6 +1,6 @@
 #pragma once
 
-#include "colours.h"
+#include "colour.h"
 
 typedef struct canvas {
 	int width;

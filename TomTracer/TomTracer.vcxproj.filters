@@ -24,10 +24,10 @@
     <ClCompile Include="util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="colours.c">
+    <ClCompile Include="canvas.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="canvas.c">
+    <ClCompile Include="colour.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="colours.h">
+    <ClInclude Include="canvas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="canvas.h">
+    <ClInclude Include="colour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

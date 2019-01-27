@@ -3,7 +3,7 @@
 
 #include "canvas.h"
 
-#include "colours.h"
+#include "colour.h"
 
 canvas *canvas_create(int width, int height) {
 	canvas *c = malloc(sizeof(canvas));

@@ -1,5 +1,4 @@
-#ifndef TUPLE_H
-#define TUPLE_H
+#pragma once
 
 #define VECTOR 0
 #define POINT 1
@@ -30,5 +29,3 @@ tuple tuple_scale(tuple a, float scalar);
 tuple tuple_divide(tuple a, float divisor);
 tuple tuple_normalize(tuple a);
 tuple tuple_cross_product(tuple a, tuple b);
-
-#endif

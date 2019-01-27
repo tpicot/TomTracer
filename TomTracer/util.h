@@ -1,8 +1,5 @@
-#ifndef UTIL_H
-#define UTIL_H
+#pragma once
 
 #define EPSILON .00001f
 
 int equal(float a, float b);
-
-#endif

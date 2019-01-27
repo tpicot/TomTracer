@@ -1,5 +1,4 @@
-#ifndef COLOUR_H
-#define COLOUR_H
+#pragma once
 
 #define VECTOR 0
 #define POINT 1
@@ -17,5 +16,3 @@ colour colour_add(colour a, colour b);
 colour colour_subtract(colour a, colour b);
 colour colour_multiply(colour a, colour b);
 colour colour_scale(colour a, float scalar);
-
-#endif
